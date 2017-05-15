@@ -1,0 +1,64 @@
+Warning: file 'memory.vmh' for memory 'dMem' has a gap at addresses 14 to 67108863.
+Warning: file 'memory.vmh' for memory 'iMem' has a gap at addresses 14 to 67108863.
+
+Cycle          0 ----------------------------------------------------
+
+cycle          0
+Fetch : from Pc          0 , expanded inst : 30f440000000, 
+irmovl $'h00000040,  %'h4
+
+Cycle          1 ----------------------------------------------------
+
+cycle          1
+Fetch : from Pc          6 , expanded inst : 30f024000000, 
+irmovl $'h00000024,  %'h0
+
+Cycle          2 ----------------------------------------------------
+
+cycle          2
+Fetch : from Pc         12 , expanded inst : a00f6300741c, 
+push %'h0
+
+Cycle          3 ----------------------------------------------------
+
+cycle          3
+Fetch : from Pc         14 , expanded inst : 6300741c0000, 
+xorl %'h0, %'h0
+
+Cycle          4 ----------------------------------------------------
+
+cycle          4
+Fetch : from Pc         16 , expanded inst : 741c00000030, 
+jne $'h0000001c
+
+Cycle          5 ----------------------------------------------------
+
+cycle          5
+Fetch : from Pc         21 , expanded inst : 30f001000000, 
+irmovl $'h00000001,  %'h0
+
+Cycle          6 ----------------------------------------------------
+
+cycle          6
+Fetch : from Pc         27 , expanded inst : 30f601000000, 
+irmovl $'h00000001,  %'h6
+
+Cycle          7 ----------------------------------------------------
+
+cycle          7
+Fetch : from Pc         33 , expanded inst : 6160c00e0090, 
+subl %'h6, %'h0
+
+Cycle          8 ----------------------------------------------------
+
+cycle          8
+Fetch : from Pc         35 , expanded inst : c00e009030f3, 
+mtc0 %'h0, %'he
+
+Cycle          9 ----------------------------------------------------
+
+cycle          9
+Fetch : from Pc         37 , expanded inst : 009030f30200, 
+halt
+
+Cycle         10 ----------------------------------------------------
