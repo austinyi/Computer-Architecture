@@ -14,13 +14,13 @@ function DecodedInst decode(Inst inst,Addr pc);
         
 	case (iCode)
 	// rrmovl is included in cmov 
-	
+
 	halt, nop:
 	begin
 		dInst.iType = case(iCode)
-					  	halt : Hlt;
-						nop : Nop;
-					  endcase;
+							halt : Hlt;
+							nop : Nop;
+						endcase;
 		dInst.oplFunc = FNop;
 		dInst.condUsed = Al;
 		dInst.valP = pc + 1;
@@ -28,24 +28,6 @@ function DecodedInst decode(Inst inst,Addr pc);
 		dInst.dstM = Invalid;
 		dInst.regA = Invalid;
 		dInst.regB = Invalid;
-		dInst.valC = Invalid;
-	end
-
-	opl:
-	begin
-		dInst.iType = Opl;
-		dInst.oplFunc = case(ifun)
-						  addc: FAdd;
-						  subc: FSub;
-						  andc: FAnd;
-						  xorc: FXor;
-						endcase;
-		dInst.condUsed = Al;
-		dInst.valP = pc + 2;
-		dInst.dstE = validReg(rB);
-		dInst.dstM = Invalid;
-		dInst.regA = validReg(rA);
-		dInst.regB = validReg(rB);
 		dInst.valC = Invalid;
 	end
 
@@ -109,6 +91,24 @@ function DecodedInst decode(Inst inst,Addr pc);
 		dInst.valC = Invalid;
 	end
 
+	opl:
+	begin
+		dInst.iType = Opl;
+		dInst.oplFunc = case(ifun)
+						  addc: FAdd;
+						  subc: FSub;
+						  andc: FAnd;
+						  xorc: FXor;
+						endcase;
+		dInst.condUsed = Al;
+		dInst.valP = pc + 2;
+		dInst.dstE = validReg(rB);
+		dInst.dstM = Invalid;
+		dInst.regA = validReg(rA);
+		dInst.regB = validReg(rB);
+		dInst.valC = Invalid;
+	end
+
 	jmp:
 	begin
 		dInst.iType = Jmp;
@@ -130,19 +130,6 @@ function DecodedInst decode(Inst inst,Addr pc);
 		dInst.valC = Valid(dest);
 	end
 
-	pop:
-	begin
-		dInst.iType = (rA == esp)? Unsupported : Pop;
-		dInst.oplFunc = FAdd;
-		dInst.condUsed = Al;
-		dInst.valP = pc + 2;
-		dInst.dstE = validReg(esp);
-		dInst.dstM = validReg(rA);
-		dInst.regA = validReg(esp);
-		dInst.regB = validReg(esp);
-		dInst.valC = Invalid;
-	end
-
 	push:
 	begin
 		dInst.iType = Push;
@@ -152,6 +139,19 @@ function DecodedInst decode(Inst inst,Addr pc);
 		dInst.dstE = validReg(esp);
 		dInst.dstM = Invalid;
 		dInst.regA = validReg(rA);
+		dInst.regB = validReg(esp);
+		dInst.valC = Invalid;
+	end
+
+	pop:
+	begin
+		dInst.iType = (rA == esp)? Unsupported : Pop;
+		dInst.oplFunc = FAdd;
+		dInst.condUsed = Al;
+		dInst.valP = pc + 2;
+		dInst.dstE = validReg(esp);
+		dInst.dstM = validReg(rA);
+		dInst.regA = validReg(esp);
 		dInst.regB = validReg(esp);
 		dInst.valC = Invalid;
 	end

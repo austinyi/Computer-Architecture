@@ -16,6 +16,13 @@ typedef struct {
 	Bool epoch;
 } Fetch2Decode deriving(Bits, Eq);
 
+typedef struct {
+	DecodedInst inst;
+	Addr pc;
+	Addr ppc;
+	Bool epoch;
+} Decode2Rest deriving(Bits, Eq);
+	
 (*synthesize*)
 module mkProc(Proc);
   Reg#(Addr)    pc  <- mkRegU;
@@ -31,6 +38,7 @@ module mkProc(Proc);
   Fifo#(1,ProcStatus)   statRedirect <- mkBypassFifo;
 
   Fifo#(2,Fetch2Decode)	f2d    	     <- mkCFFifo;
+  Fifo#(2,Decode2Rest) d2r			<- mkCFFifo;
 
   Reg#(Bool) fEpoch <- mkRegU;
   Reg#(Bool) eEpoch <- mkRegU;
@@ -40,27 +48,16 @@ module mkProc(Proc);
 	  let iCode = getICode(inst);
 	  let ppc = nextAddr(pc,iCode);
 	
- /*     if(execRedirect.notEmpty)
-	  begin
-		  execRedirect.deq;
-		  pc <= execRedirect.first;
-		  fEpoch <= !fEpoch;
-	  end
-	  else */
-     
-    //  begin
 	  if(eEpoch == fEpoch)	
 		  pc <= ppc;
-//	  end
 
 	  f2d.enq(Fetch2Decode{inst:inst, pc:pc, ppc:ppc, epoch:fEpoch});
 	  $display("Fetch : from Pc %d , expanded inst : %x, \n", pc, inst, showInst(inst)); 
   endrule
 
-
-  rule doRest(cop.started && stat == AOK);
+  rule doDecode(cop.started && stat == AOK);
 	  let inst   = f2d.first.inst;
-	  let pc2 	 = f2d.first.pc;
+	  let pc 	 = f2d.first.pc;
 	  let ppc    = f2d.first.ppc;
 	  let iEpoch = f2d.first.epoch;
 	  f2d.deq;
@@ -68,12 +65,26 @@ module mkProc(Proc);
 	  if(iEpoch == eEpoch)
 	  begin
 		  //Decode 
-		  let dInst = decode(inst, pc2);
+		  let dInst = decode(inst, pc);
+		  d2r.enq(Decode2Rest{inst:dInst, pc:pc, ppc:ppc, epoch:iEpoch});
+	end
 
+  endrule  	  
+
+  rule doRest(cop.started && stat == AOK);
+	  let dInst   = d2r.first.inst;
+	  let pc2 	 = d2r.first.pc;
+	  let ppc    = d2r.first.ppc;
+	  let iEpoch = d2r.first.epoch;
+	  d2r.deq;
+
+	  if(iEpoch == eEpoch)
+	  begin
+		  //Decode 
 		  dInst.valA   = isValid(dInst.regA)? tagged Valid rf.rdA(validRegValue(dInst.regA)) : Invalid;
    		  dInst.valB   = isValid(dInst.regB)? tagged Valid rf.rdB(validRegValue(dInst.regB)) : Invalid;
 		  dInst.copVal = isValid(dInst.regA)? tagged Valid cop.rd(validRegValue(dInst.regA)) : Invalid;
-
+		  
 		  //Exec
 		  let eInst = exec(dInst, condFlag, ppc);
 		  condFlag <= eInst.condFlag;
@@ -98,6 +109,13 @@ module mkProc(Proc);
 			end
 	  	  endcase
 
+		  case(iType)
+        	Call, Jmp, Ret :
+          		cop.incInstTypeCnt(Ctr);
+        	RMmov, MRmov, Push, Pop :
+          		cop.incInstTypeCnt(Mem);
+       	  endcase
+
 		  //Update Status
 		  let newStatus = case(iType)
 		  				      Unsupported : INS;
@@ -110,11 +128,30 @@ module mkProc(Proc);
 		  	  eEpoch <= !eEpoch;
 			  let redirPc = validValue(eInst.nextPc);
 			  $display("mispredicted, redirect %d ", redirPc);
-//			  execRedirect.deq;
+			  cop.incBPMissCnt();
 			  pc <= redirPc;
 			  fEpoch <= !fEpoch;
-	//		  execRedirect.enq(redirPc);
-	 	  end
+        	case(iType)
+          		Call:
+            		cop.incMissInstTypeCnt(MTCallMiss);
+          		Jmp:
+            		cop.incMissInstTypeCnt(MTJmpMiss);
+          		Ret :
+            		cop.incMissInstTypeCnt(MTRetMiss);
+        	endcase
+      	  end
+      	  else
+      		begin
+        		case(iType)
+          			Call:
+            			cop.incMissInstTypeCnt(MTCall);
+          			Jmp:
+            			cop.incMissInstTypeCnt(MTJmp);
+          			Ret :
+            			cop.incMissInstTypeCnt(MTRet);
+        		endcase
+      		end
+	 	  
 
 		statRedirect.enq(newStatus);
 
@@ -176,3 +213,4 @@ module mkProc(Proc);
   endmethod
 
 endmodule
+

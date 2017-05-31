@@ -18,7 +18,7 @@ import ConfigReg::*;
 import Fifo::*;
 
 typedef enum {Ctr, Mem} InstCntType deriving(Bits, Eq);
-typedef enum {Dummy1, Dummy2, Dummy3} InstMissCntType deriving(Bits, Eq);
+typedef enum {MTCall, MTJmp, MTRet, MTCallMiss, MTJmpMiss, MTRetMiss} InstMissCntType deriving(Bits, Eq);
 
 interface Cop;
   method Action start;
@@ -44,6 +44,14 @@ module mkCop(Cop);
   Reg#(Data) numMem  <- mkConfigReg(0);
   Reg#(Data) numCtr  <- mkConfigReg(0);
   Reg#(Data) numBPMiss <- mkConfigReg(0);
+
+  Reg#(Data) numMTCall  <- mkConfigReg(0);
+  Reg#(Data) numMTJmp  <- mkConfigReg(0);
+  Reg#(Data) numMTRet  <- mkConfigReg(0);
+
+  Reg#(Data) numMTCallMiss  <- mkConfigReg(0);
+  Reg#(Data) numMTJmpMiss  <- mkConfigReg(0);
+  Reg#(Data) numMTRetMiss  <- mkConfigReg(0);
 
   Fifo#(2, Tuple3#(RIndx, Data, Data)) copFifo <- mkCFFifo;
 
@@ -92,9 +100,9 @@ module mkCop(Cop);
 				$fwrite(stderr, "Mispredicted	      : %d\n", numBPMiss);
 	  			$fwrite(stderr, "==========================================\n");
 				$fwrite(stderr, "Misprediction detail\n");
-				$fwrite(stderr, "Call 		      : %d / %d\n" /* implement */);
-				$fwrite(stderr, "Ret 		      : %d / %d\n" /* implement */);
-				$fwrite(stderr, "Jmp 		      : %d / %d\n" /* implement */);
+				$fwrite(stderr, "Call 		      : %d / %d\n", numMTCallMiss, numMTCallMiss + numMTCall /* implement */);
+				$fwrite(stderr, "Ret 		      : %d / %d\n", numMTRetMiss, numMTRetMiss + numMTRet /* implement */);
+				$fwrite(stderr, "Jmp 		      : %d / %d\n", numMTJmpMiss, numMTJmpMiss + numMTJmp /* implement */);
 	  			$fwrite(stderr, "==========================================\n");
 				copFifo.enq(tuple3(14, val, numInsts+1));
 			end
@@ -112,7 +120,14 @@ module mkCop(Cop);
   endmethod
 
   method Action incMissInstTypeCnt(InstMissCntType inst);
-	  noAction();
+	case(inst)
+      MTCall : numMTCall <= numMTCall + 1;
+      MTJmp : numMTJmp <= numMTJmp + 1;
+	  MTRet : numMTRet <= numMTRet + 1;
+      MTCallMiss : numMTCallMiss <= numMTCallMiss + 1;
+      MTJmpMiss : numMTJmpMiss <= numMTJmpMiss + 1;
+	  MTRetMiss : numMTRetMiss <= numMTRetMiss + 1;
+    endcase
     /* Implement */
   endmethod
 

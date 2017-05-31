@@ -1,0 +1,242 @@
+3,5c3,5
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		halt
+> Opl Function:			Nop
+> Condition Type:			always
+17,19c17,19
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		nop
+> Opl Function:			Nop
+> Condition Type:			always
+31,33c31,33
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		cmov
+> Opl Function:			Nop
+> Condition Type:			always
+45,47c45,47
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		cmov
+> Opl Function:			Nop
+> Condition Type:			less than or equal
+59,61c59,61
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		cmov
+> Opl Function:			Nop
+> Condition Type:			less than
+73,75c73,75
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		cmov
+> Opl Function:			Nop
+> Condition Type:			equal
+87,89c87,89
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		cmov
+> Opl Function:			Nop
+> Condition Type:			not equal
+101,103c101,103
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		cmov
+> Opl Function:			Nop
+> Condition Type:			greater than or equal
+115,117c115,117
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		cmov
+> Opl Function:			Nop
+> Condition Type:			greater than
+129,131c129,131
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		irmovl
+> Opl Function:			Nop
+> Condition Type:			always
+143,145c143,145
+< Instruction Type:		
+< Opl Function:			A
+< Condition Type:			
+---
+> Instruction Type:		rmmovl
+> Opl Function:			Add
+> Condition Type:			always
+157,159c157,159
+< Instruction Type:		
+< Opl Function:			A
+< Condition Type:			
+---
+> Instruction Type:		mrmovl
+> Opl Function:			Add
+> Condition Type:			always
+171,173c171,173
+< Instruction Type:		
+< Opl Function:			A
+< Condition Type:			
+---
+> Instruction Type:		opl
+> Opl Function:			Add
+> Condition Type:			always
+185,187c185,187
+< Instruction Type:		
+< Opl Function:			S
+< Condition Type:			
+---
+> Instruction Type:		opl
+> Opl Function:			Sub
+> Condition Type:			always
+199,201c199,201
+< Instruction Type:		
+< Opl Function:			A
+< Condition Type:			
+---
+> Instruction Type:		opl
+> Opl Function:			And
+> Condition Type:			always
+213,215c213,215
+< Instruction Type:		
+< Opl Function:			X
+< Condition Type:			
+---
+> Instruction Type:		opl
+> Opl Function:			Xor
+> Condition Type:			always
+227,229c227,229
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		jmp
+> Opl Function:			Nop
+> Condition Type:			always
+241,243c241,243
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		jmp
+> Opl Function:			Nop
+> Condition Type:			less than or equal
+255,257c255,257
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		jmp
+> Opl Function:			Nop
+> Condition Type:			less than
+269,271c269,271
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		jmp
+> Opl Function:			Nop
+> Condition Type:			equal
+283,285c283,285
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		jmp
+> Opl Function:			Nop
+> Condition Type:			not equal
+297,299c297,299
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		jmp
+> Opl Function:			Nop
+> Condition Type:			greater than or equal
+311,313c311,313
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		jmp
+> Opl Function:			Nop
+> Condition Type:			greater than
+325,327c325,327
+< Instruction Type:		
+< Opl Function:			S
+< Condition Type:			
+---
+> Instruction Type:		call
+> Opl Function:			Sub
+> Condition Type:			always
+339,341c339,341
+< Instruction Type:		
+< Opl Function:			A
+< Condition Type:			
+---
+> Instruction Type:		ret
+> Opl Function:			Add
+> Condition Type:			always
+353,355c353,355
+< Instruction Type:		
+< Opl Function:			S
+< Condition Type:			
+---
+> Instruction Type:		push
+> Opl Function:			Sub
+> Condition Type:			always
+367,369c367,369
+< Instruction Type:		
+< Opl Function:			A
+< Condition Type:			
+---
+> Instruction Type:		pop
+> Opl Function:			Add
+> Condition Type:			always
+381,383c381,383
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		mtc0
+> Opl Function:			Nop
+> Condition Type:			always
+395,397c395,397
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		mfc0
+> Opl Function:			Nop
+> Condition Type:			always
+409,411c409,411
+< Instruction Type:		
+< Opl Function:			N
+< Condition Type:			
+---
+> Instruction Type:		Unsupported
+> Opl Function:			Nop
+> Condition Type:			always
+421d420
+< 
